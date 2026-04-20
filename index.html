@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniVibe – Smart Campus Dashboard</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    /* =============================================
+       CSS VARIABLES – change colors here easily
+    ============================================= */
+    :root {
+      --bg:        #0f1117;
+      --surface:   #1a1d27;
+      --border:    #2a2d3a;
+      --accent:    #6c63ff;
+      --accent2:   #ff6584;
+      --accent3:   #43e97b;
+      --text:      #e8eaf0;
+      --muted:     #7b7f93;
+      --radius:    14px;
+      --font-head: 'Syne', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    /* =============================================
+       RESET & BASE
+    ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* =============================================
+       HEADER / NAV
+    ============================================= */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15, 17, 23, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .logo {
+      font-family: var(--font-head);
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+    .logo span { color: var(--accent); }
+
+    nav {
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--muted);
+      font-weight: 500;
+      padding: 0.4rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      transition: color 0.2s, background 0.2s;
+    }
+    nav a:hover,
+    nav a.active {
+      color: var(--text);
+      background: var(--surface);
+    }
+
+    /* =============================================
+       HERO BANNER
+    ============================================= */
+    .hero {
+      text-align: center;
+      padding: 4rem 2rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(108,99,255,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero h1 {
+      font-family: var(--font-head);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero h1 em { color: var(--accent); font-style: normal; }
+
+    .hero p {
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(108,99,255,0.15);
+      border: 1px solid rgba(108,99,255,0.35);
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.8rem;
+      border-radius: 999px;
+      margin-bottom: 1.25rem;
+    }
+
+    /* =============================================
+       MAIN LAYOUT
+    ============================================= */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+      display: grid;
+      gap: 2rem;
+    }
+
+    /* =============================================
+       SECTION CARDS
+    ============================================= */
+    section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .icon-purple { background: rgba(108,99,255,0.15); }
+    .icon-pink   { background: rgba(255,101,132,0.15); }
+    .icon-green  { background: rgba(67,233,123,0.15);  }
+    .icon-yellow { background: rgba(255,213,79,0.15);  }
+
+    .section-header h2 {
+      font-family: var(--font-head);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .section-header p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    /* =============================================
+       1. NOTICE BOARD
+    ============================================= */
+    .notice-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .notice-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      transition: border-color 0.2s;
+    }
+    .notice-card:hover { border-color: var(--accent); }
+
+    .notice-tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .tag-exam   { background: rgba(255,101,132,0.15); color: var(--accent2); }
+    .tag-event  { background: rgba(108,99,255,0.15);  color: var(--accent);  }
+    .tag-notice { background: rgba(67,233,123,0.15);  color: var(--accent3); }
+
+    .notice-body strong { font-weight: 600; display: block; margin-bottom: 0.2rem; }
+    .notice-body span   { font-size: 0.82rem; color: var(--muted); }
+
+    /* =============================================
+       2. QUICK REPORT
+    ============================================= */
+    .report-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    label {
+      font-size: 0.83rem;
+      font-weight: 600;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    select,
+    textarea {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 0.7rem 0.95rem;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+    }
+    textarea { resize: vertical; min-height: 90px; }
+    select option { background: var(--surface); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.65rem 1.4rem;
+      border: none;
+      border-radius: 10px;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .btn:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-pink    { background: var(--accent2); color: #fff; }
+    .btn-green   { background: var(--accent3); color: #0f1117; }
+
+    /* =============================================
+       3. LOST & FOUND
+    ============================================= */
+    .lf-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .lf-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .lf-card:hover { border-color: var(--accent2); transform: translateY(-3px); }
+
+    .lf-card .img-placeholder {
+      width: 100%;
+      height: 130px;
+      background: linear-gradient(135deg, #1e2032 0%, #272a3d 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+
+    .lf-card .card-body {
+      padding: 0.8rem 0.9rem;
+    }
+    .lf-card .card-body strong { font-size: 0.9rem; display: block; margin-bottom: 0.2rem; }
+    .lf-card .card-body span  { font-size: 0.78rem; color: var(--muted); }
+
+    .lf-status {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      padding: 0.15rem 0.5rem;
+      border-radius: 5px;
+      display: inline-block;
+      margin-top: 0.45rem;
+    }
+    .status-lost  { background: rgba(255,101,132,0.15); color: var(--accent2); }
+    .status-found { background: rgba(67,233,123,0.15);  color: var(--accent3); }
+
+    /* =============================================
+       4. STUDENT LOUNGE
+    ============================================= */
+    .post-composer {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      align-items: flex-start;
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .composer-box {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .post-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .post-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      transition: border-color 0.2s;
+    }
+    .post-card:hover { border-color: var(--accent); }
+
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 0.5rem;
+    }
+    .post-meta .name   { font-weight: 600; font-size: 0.9rem; }
+    .post-meta .time   { font-size: 0.78rem; color: var(--muted); margin-left: auto; }
+
+    .post-text { font-size: 0.9rem; color: var(--text); margin-bottom: 0.65rem; }
+
+    .post-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .action-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-family: var(--font-body);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0;
+      transition: color 0.2s;
+    }
+    .action-btn:hover { color: var(--accent); }
+
+    /* =============================================
+       SUCCESS TOAST
+    ============================================= */
+    #toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: var(--accent3);
+      color: #0f1117;
+      font-weight: 600;
+      padding: 0.7rem 1.2rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none;
+      z-index: 999;
+    }
+    #toast.show { opacity: 1; transform: translateY(0); }
+
+    /* =============================================
+       FOOTER
+    ============================================= */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+    footer span { color: var(--accent); }
+
+    /* =============================================
+       RESPONSIVE
+    ============================================= */
+    @media (max-width: 600px) {
+      header { padding: 0 1rem; }
+      nav a  { padding: 0.35rem 0.6rem; font-size: 0.82rem; }
+      main   { padding: 1rem 1rem 3rem; }
+      section { padding: 1.25rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ========== HEADER ========== -->
+  <header>
+    <div class="logo">Uni<span>Vibe</span></div>
+    <nav>
+      <a href="#notices"  class="active">📢 Notices</a>
+      <a href="#report">🔧 Report</a>
+      <a href="#lostfound">🔍 Lost&Found</a>
+      <a href="#lounge">💬 Lounge</a>
+    </nav>
+  </header>
+
+  <!-- ========== HERO ========== -->
+  <div class="hero">
+    <div class="badge">🎓 Smart Campus Dashboard</div>
+    <h1>Your Campus.<br><em>All in One Place.</em></h1>
+    <p>Notices, reports, lost & found, and student chatter — unified for your college life.</p>
+  </div>
+
+  <!-- ========== MAIN ========== -->
+  <main>
+
+    <!-- ── 1. NOTICE BOARD ── -->
+    <section id="notices">
+      <div class="section-header">
+        <div class="section-icon icon-purple">📢</div>
+        <div>
+          <h2>Digital Notice Board</h2>
+          <p>Latest announcements from campus</p>
+        </div>
+      </div>
+
+      <div class="notice-list" id="noticeList">
+
+        <div class="notice-card">
+          <span class="notice-tag tag-exam">Exam</span>
+          <div class="notice-body">
+            <strong>Mid-Semester Timetable Released</strong>
+            <span>📅 Posted on 19 Jul 2025 &nbsp;|&nbsp; Academic Cell</span>
+          </div>
+        </div>
+
+        <div class="notice-card">
+          <span class="notice-tag tag-event">Event</span>
+          <div class="notice-body">
+            <strong>TechFest 2025 – Registrations Open!</strong>
+            <span>📅 Posted on 18 Jul 2025 &nbsp;|&nbsp; Student Council</span>
+          </div>
+        </div>
+
+        <div class="notice-card">
+          <span class="notice-tag tag-notice">Notice</span>
+          <div class="notice-body">
+            <strong>Library will remain closed on 20 Jul (Holiday)</strong>
+            <span>📅 Posted on 17 Jul 2025 &nbsp;|&nbsp; Library Admin</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── 2. QUICK REPORT ── -->
+    <section id="report">
+      <div class="section-header">
+        <div class="section-icon icon-pink">🔧</div>
+        <div>
+          <h2>Quick Report</h2>
+          <p>Report a campus issue in seconds</p>
+        </div>
+      </div>
+
+      <form class="report-form" id="reportForm" onsubmit="submitReport(event)">
+        <div>
+          <label for="studentName">Your Name</label>
+          <input type="text" id="studentName" placeholder="e.g. Riya Sharma" required />
+        </div>
+        <div>
+          <label for="studentEmail">College Email</label>
+          <input type="email" id="studentEmail" placeholder="riya@college.edu" />
+        </div>
+        <div>
+          <label for="issueType">Issue Category</label>
+          <select id="issueType" required>
+            <option value="">-- Select Category --</option>
+            <option>Broken Furniture</option>
+            <option>Electricity / Power Issue</option>
+            <option>Water / Plumbing</option>
+            <option>Internet / Wi-Fi</option>
+            <option>Cleanliness</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="issueDesc">Describe the Issue</label>
+          <textarea id="issueDesc" placeholder="Briefly describe what's wrong and where..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-pink">🚀 Submit Report</button>
+      </form>
+    </section>
+
+    <!-- ── 3. LOST & FOUND ── -->
+    <section id="lostfound">
+      <div class="section-header">
+        <div class="section-icon icon-yellow">🔍</div>
+        <div>
+          <h2>Lost &amp; Found</h2>
+          <p>Found something? Lost something? Post here.</p>
+        </div>
+      </div>
+
+      <div class="lf-grid">
+
+        <div class="lf-card">
+          <div class="img-placeholder">🎒</div>
+          <div class="card-body">
+            <strong>Black Backpack</strong>
+            <span>Found near Canteen, Block B</span><br>
+            <span class="lf-status status-found">Found</span>
+          </div>
+        </div>
+
+        <div class="lf-card">
+          <div class="img-placeholder">🔑</div>
+          <div class="card-body">
+            <strong>Key Ring (3 keys)</strong>
+            <span>Lost somewhere in Library</span><br>
+            <span class="lf-status status-lost">Lost</span>
+          </div>
+        </div>
+
+        <div class="lf-card">
+          <div class="img-placeholder">📓</div>
+          <div class="card-body">
+            <strong>Blue Notebook – DS Notes</strong>
+            <span>Found in Lab 3, CSE Dept.</span><br>
+            <span class="lf-status status-found">Found</span>
+          </div>
+        </div>
+
+        <div class="lf-card">
+          <div class="img-placeholder">🎧</div>
+          <div class="card-body">
+            <strong>Wireless Earbuds</strong>
+            <span>Lost in Seminar Hall</span><br>
+            <span class="lf-status status-lost">Lost</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── 4. STUDENT LOUNGE ── -->
+    <section id="lounge">
+      <div class="section-header">
+        <div class="section-icon icon-green">💬</div>
+        <div>
+          <h2>Student Lounge</h2>
+          <p>Share updates, memes, or anything campus-related</p>
+        </div>
+      </div>
+
+      <!-- Post Composer -->
+      <div class="post-composer">
+        <div class="avatar">You</div>
+        <div class="composer-box">
+          <textarea id="postInput" placeholder="What's on your mind? 🎓" rows="2"></textarea>
+          <button class="btn btn-green" onclick="addPost()">✍️ Post</button>
+        </div>
+      </div>
+
+      <!-- Feed -->
+      <div class="post-feed" id="postFeed">
+
+        <div class="post-card">
+          <div class="post-meta">
+            <div class="avatar">AM</div>
+            <span class="name">Aryan M.</span>
+            <span class="time">2 hrs ago</span>
+          </div>
+          <p class="post-text">Anyone else think the new timetable is a disaster? 😭 3 practicals on Friday!</p>
+          <div class="post-actions">
+            <button class="action-btn" onclick="this.textContent='👍 ' + (parseInt(this.textContent.split(' ')[1]||0)+1)">👍 12</button>
+            <button class="action-btn">💬 Reply</button>
+          </div>
+        </div>
+
+        <div class="post-card">
+          <div class="post-meta">
+            <div class="avatar">PR</div>
+            <span class="name">Priya R.</span>
+            <span class="time">5 hrs ago</span>
+          </div>
+          <p class="post-text">Free pizza at TechFest stall today!! Block C, ground floor 🍕🔥</p>
+          <div class="post-actions">
+            <button class="action-btn" onclick="this.textContent='👍 ' + (parseInt(this.textContent.split(' ')[1]||0)+1)">👍 47</button>
+            <button class="action-btn">💬 Reply</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer>
+    Built with ❤️ by <span>Team UniVibe</span> &nbsp;·&nbsp; Hackathon 2025
+  </footer>
+
+  <!-- ========== TOAST NOTIFICATION ========== -->
+  <div id="toast">✅ Done!</div>
+
+  <!-- ========== JAVASCRIPT ========== -->
+  <script>
+    /* ── Toast helper ── */
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2800);
+    }
+
+    /* ── Report Form Submit ── */
+    function submitReport(e) {
+      e.preventDefault(); // stops page refresh
+      showToast('✅ Report submitted! We\'ll look into it.');
+      e.target.reset();   // clears the form
+    }
+
+    /* ── Student Lounge – Add Post ── */
+    function addPost() {
+      const input = document.getElementById('postInput');
+      const text  = input.value.trim();
+      if (!text) { showToast('⚠️ Write something first!'); return; }
+
+      const feed = document.getElementById('postFeed');
+
+      const card = document.createElement('div');
+      card.className = 'post-card';
+      card.innerHTML = `
+        <div class="post-meta">
+          <div class="avatar">You</div>
+          <span class="name">You</span>
+          <span class="time">Just now</span>
+        </div>
+        <p class="post-text">${text}</p>
+        <div class="post-actions">
+          <button class="action-btn" onclick="this.textContent='👍 ' + (parseInt(this.textContent.split(' ')[1]||0)+1)">👍 0</button>
+          <button class="action-btn">💬 Reply</button>
+        </div>
+      `;
+
+      // Add the new post at the TOP of the feed
+      feed.insertBefore(card, feed.firstChild);
+
+      input.value = '';
+      showToast('🎉 Post shared!');
+    }
+
+    /* ── Highlight active nav link on scroll ── */
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('nav a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 100) current = s.id;
+      });
+      navLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+      });
+    });
+  </script>
+
+</body>
+</html>
