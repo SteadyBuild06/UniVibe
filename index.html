@@ -674,65 +674,8 @@
   <div id="toast">✅ Done!</div>
 
   <!-- ========== JAVASCRIPT ========== -->
-  <script>
-    /* ── Toast helper ── */
-    function showToast(msg) {
-      const t = document.getElementById('toast');
-      t.textContent = msg;
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 2800);
-    }
-
-    /* ── Report Form Submit ── */
-    function submitReport(e) {
-      e.preventDefault(); // stops page refresh
-      showToast('✅ Report submitted! We\'ll look into it.');
-      e.target.reset();   // clears the form
-    }
-
-    /* ── Student Lounge – Add Post ── */
-    function addPost() {
-      const input = document.getElementById('postInput');
-      const text  = input.value.trim();
-      if (!text) { showToast('⚠️ Write something first!'); return; }
-
-      const feed = document.getElementById('postFeed');
-
-      const card = document.createElement('div');
-      card.className = 'post-card';
-      card.innerHTML = `
-        <div class="post-meta">
-          <div class="avatar">You</div>
-          <span class="name">You</span>
-          <span class="time">Just now</span>
-        </div>
-        <p class="post-text">${text}</p>
-        <div class="post-actions">
-          <button class="action-btn" onclick="this.textContent='👍 ' + (parseInt(this.textContent.split(' ')[1]||0)+1)">👍 0</button>
-          <button class="action-btn">💬 Reply</button>
-        </div>
-      `;
-
-      // Add the new post at the TOP of the feed
-      feed.insertBefore(card, feed.firstChild);
-
-      input.value = '';
-      showToast('🎉 Post shared!');
-    }
-
-    /* ── Highlight active nav link on scroll ── */
-    const sections = document.querySelectorAll('section');
-    const navLinks = document.querySelectorAll('nav a');
-
-    window.addEventListener('scroll', () => {
-      let current = '';
-      sections.forEach(s => {
-        if (window.scrollY >= s.offsetTop - 100) current = s.id;
-      });
-      navLinks.forEach(a => {
-        a.classList.toggle('active', a.getAttribute('href') === '#' + current);
-      });
-    });
+  <script src="quickreport.js">
+   
   </script>
 
 </body>
